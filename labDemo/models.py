@@ -56,11 +56,11 @@ class Reservation(models.Model):
     reId = models.AutoField('预约编号', primary_key=True)
     # reNum = models.CharField(max_length=30)
     rePer = models.ForeignKey(to='PerInfo',
-                              on_delete=models.CASCADE)
+                              on_delete=models.CASCADE, verbose_name="预约人")
     # startTime = models.DateTimeField()  # 待修改
     # endTime = models.DateTimeField()  # 待修改
     approvalPer = models.ForeignKey(to='User',
-                                    on_delete=models.CASCADE)
+                                    on_delete=models.CASCADE, verbose_name="批准人")
     reState = models.IntegerField('预约状态', choices=((0, '预约中'), (-1, '拒绝'), (1, '批准'), (2, '已结束')), default=0)
 
 
@@ -78,14 +78,14 @@ class ExpData(models.Model):
 class Project(models.Model):
     pjId = models.AutoField(primary_key=True)
     # pjNum = models.CharField(max_length=20, unique=True)
-    pjName = models.CharField(max_length=20)
-    responPer = models.CharField(max_length=20)
+    pjName = models.CharField('项目名称', max_length=20)
+    responPer = models.CharField('项目负责人', max_length=20)
     # applyTime = models.DateTimeField()#待修改
     pjState = models.IntegerField('项目状态', choices=((0, '申请中'), (1, '申请通过'), (2, '中期检查'),
                                                    (3, '结题'), (-1, '申请未通过')), default=0)
     # checkTime = models.DateTimeField()#待修改
-    checkPer = models.CharField(max_length=20)
-    remark = models.CharField(max_length=200, null=True, blank=True)
+    checkPer = models.CharField('项目检查员', max_length=20)
+    remark = models.CharField('备注', max_length=200, null=True, blank=True)
 
     def __str__(self):
         return self.pjName
