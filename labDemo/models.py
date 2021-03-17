@@ -59,8 +59,8 @@ class Reservation(models.Model):
     # reNum = models.CharField(max_length=30)
     rePer = models.ForeignKey(to='PerInfo',
                               on_delete=models.CASCADE, verbose_name="预约人")
-    startTime = models.DateTimeField(verbose_name="开始时间")  # 待修改
-    endTime = models.DateTimeField(verbose_name="结束时间")  # 待修改
+    startTime = models.DateTimeField(verbose_name="开始时间", default=timezone.now())  # 待修改
+    endTime = models.DateTimeField(verbose_name="结束时间", default=timezone.now())  # 待修改
     approvalPer = models.ForeignKey(to='User',
                                     on_delete=models.CASCADE, verbose_name="批准人")
     reState = models.IntegerField('预约状态', choices=((0, '预约中'), (-1, '拒绝'), (1, '批准'), (2, '已结束')), default=0)
