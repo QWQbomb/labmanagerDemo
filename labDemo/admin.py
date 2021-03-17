@@ -4,6 +4,8 @@ from django.contrib import admin
 from .models import User, PerInfo, Role, Equipment, Reservation, ExpData, Project
 
 admin.site.site_header = '实验室管理系统'
+
+
 # admin.site.register(User)
 
 @admin.register(PerInfo)
@@ -13,13 +15,15 @@ class PerInfo(admin.ModelAdmin):
     list_per_page = 10
     # list_editable = ('address', 'email', 'telephone')
 
+
 @admin.register(Reservation)
 class Reservation(admin.ModelAdmin):
-    list_display = ('reId', 'rePer', 'approvalPer', 'reState')
+    list_display = ('reId', 'rePer', 'approvalPer', 'reState', 'startTime', 'endTime')
     list_display_links = ('reId',)
     list_filter = ('reState',)
     list_per_page = 10
     list_editable = ('reState',)
+
 
 # 暂时不需要重写
 admin.site.register(ExpData)
@@ -47,7 +51,7 @@ class Equipment(admin.ModelAdmin):
 @admin.register(Project)
 class Project(admin.ModelAdmin):
     # 设置页面可以展示的字段
-    list_display = ('pjName', 'responPer', 'pjState', 'checkPer', 'remark')
+    list_display = ('pjName', 'responPer', 'pjState', 'checkPer', 'remark', 'applyTime', 'checkTime')
     # 默认不配置的话，第一个字段会存在链接到记录编辑页面
     # list_display_links = None
     list_display_links = ('pjName',)
