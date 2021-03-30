@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'labDemo.apps.LabdemoConfig',
+    'notifications',
 ]
 
 MIDDLEWARE = [
@@ -124,3 +125,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 SIMPLEUI_HOME_INFO = False
 
 SIMPLEUI_LOGO = 'https://en.gravatar.com/userimage/197133421/44941e596399ab972a925da89d90709b.png'
+
+SIMPLEUI_ICON = {
+    'Labdemo': 'el-icon-platform-eleme',
+    'Equipments': 'el-icon-files',
+    'Exp datas': 'el-icon-document',
+    'Projects': 'el-icon-document',
+    'Reservations': 'el-icon-date',
+    'Notifications': 'el-icon-chat-dot-square',
+}
