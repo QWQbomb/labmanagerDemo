@@ -13,12 +13,18 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
 import notifications.urls
+from django.views.generic import RedirectView
+from labDemo import submit
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('labDemo/', include("labDemo.urls")),
     path('notifications/', include(notifications.urls, namespace='notifications')),
+    path('', RedirectView.as_view(url='/admin/login')),    #     重定义空路径 直接到后台登录页面
+    path('registForm.html', RedirectView.as_view(url='/labDemo/registForm')),
+    url(r'^submit/$', submit.submit_post),
 ]

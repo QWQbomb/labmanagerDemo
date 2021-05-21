@@ -10,6 +10,12 @@ admin.site.site_header = '实验室管理系统'
 
 @admin.register(PerInfo)
 class PerInfo(admin.ModelAdmin):
+    # 多用户隔离试行代码
+    # def get_queryset(self, request):
+    #     qs = super(PerInfo, self).get_queryset(request)
+    #     if request.user.is_superuser:
+    #         return qs
+    #     return qs.filter(user=request.user)
     list_display = ('name', 'address', 'email', 'telephone')
     list_display_links = ('name',)
     list_per_page = 10
@@ -18,8 +24,8 @@ class PerInfo(admin.ModelAdmin):
 
 @admin.register(Reservation)
 class Reservation(admin.ModelAdmin):
-    list_display = ('reId', 'rePer', 'approvalPer', 'reState', 'startTime', 'endTime')
-    list_display_links = ('reId',)
+    list_display = ('reId', 'rePer', 'approvalPer', 'reState', 'startTime', 'endTime', 'reEquip')
+    list_display_links = ('reId', )
     list_filter = ('reState',)
     list_per_page = 10
     list_editable = ('reState',)
@@ -41,11 +47,23 @@ class Equipment(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         # 可在此处禁用添加按钮
-        return True
+        user_per_set = request.user.get_all_permissions()  # 获取当前用户权限
+        # 待判断的权限范围
+        curr_per_set = {'labDemo.view_equipment', 'labDemo.delete_equipment', 'labDemo.add_equipment'}
+        if 'labDemo.add_equipment' in curr_per_set.intersection(user_per_set):
+            return True
+        else:
+            return False
 
-    def has_delete_permission(self, request, obj=None):
         # 可在此处禁用删除按钮
-        return True
+    def has_delete_permission(self, request, obj=None):
+        user_per_set = request.user.get_all_permissions()  # 获取当前用户权限
+        # 待判断的权限范围
+        curr_per_set = {'labDemo.view_equipment', 'labDemo.delete_equipment', 'labDemo.add_equipment'}
+        if 'labDemo.delete_equipment' in curr_per_set.intersection(user_per_set):
+            return True
+        else:
+            return False
 
 
 @admin.register(Project)

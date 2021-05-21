@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
+import time
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -24,7 +25,7 @@ SECRET_KEY = '6y-h9sbn)3gc^4jnhfm&n0hg8t1lx+=+08hvj)*0(t^#*mszct'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -122,7 +123,7 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
-SIMPLEUI_HOME_INFO = False
+SIMPLEUI_HOME_INFO = True
 
 SIMPLEUI_LOGO = 'https://en.gravatar.com/userimage/197133421/44941e596399ab972a925da89d90709b.png'
 
@@ -134,3 +135,100 @@ SIMPLEUI_ICON = {
     'Reservations': 'el-icon-date',
     'Notifications': 'el-icon-chat-dot-square',
 }
+
+SIMPLEUI_CONFIG = {
+    'system_keep': False,
+    'menu_display': ['实验设备', '实验数据', '用户个人信息', '项目', '预约信息', '消息', '认证与授权'],  # 开启排序和过滤功能,  空列表[] 为全部不显示.
+    'dynamic': True,  # 设置是否开启动态菜单, 默认为False. 如果开启, 则会在每次用户登陆时动态展示菜单内容
+    'menus': [{
+        'name': '实验设备',
+        'icon': 'fas fa-archive',
+        'url': '/admin/labDemo/equipment/'
+    }, {
+        'name': '实验数据',
+        'icon': 'fas fa-file-alt',
+        'url': '/admin/labDemo/expdata/'
+    }, {
+        'name': '用户个人信息',
+        'icon': 'fas fa-address-card',
+        'url': '/admin/labDemo/perinfo/'
+    }, {
+        'name': '项目',
+        'icon': 'fas fa-dice-d6',
+        'url': '/admin/labDemo/project/'
+    }, {
+        'name': '预约信息',
+        'icon': 'fas fa-calendar-check',
+        'url': '/admin/labDemo/reservation/'
+    }, {
+        'name': '消息',
+        'icon': 'fas fa-comment-dots',
+        'url': '/admin/notifications/notification/'
+    }, {
+        # 自2021.02.01+ 支持多级菜单，models 为子菜单名
+        'name': '认证与授权',
+        'icon': 'fas fa-address-book',
+        # 二级菜单
+        'models': [{
+            'name': '用户管理',
+            'icon': 'fas fa-id-badge',
+            'url': '/admin/auth/user/'
+        }, {
+            'name': '用户组管理',
+            'icon': 'fas fa-users-cog',
+            'url': '/admin/auth/group/'
+        }]
+    },
+
+        {
+            'app': 'auth',
+            'name': '权限认证',
+            'icon': 'fas fa-user-shield',
+            'models': [{
+                'name': '用户',
+                'icon': 'fa fa-user',
+                'url': 'auth/user/'
+            }]
+        }, {
+            # 自2021.02.01+ 支持多级菜单，models 为子菜单名
+            'name': '多级菜单测试',
+            'icon': 'fa fa-file',
+            # 二级菜单
+            'models': [{
+                'name': 'Baidu',
+                'icon': 'far fa-surprise',
+                # 第三级菜单 ，
+                'models': [
+                    {
+                        'name': '爱奇艺',
+                        'url': 'https://www.iqiyi.com/dianshiju/'
+                        # 第四级就不支持了，element只支持了3级
+                    }, {
+                        'name': '百度问答',
+                        'icon': 'far fa-surprise',
+                        'url': 'https://zhidao.baidu.com/'
+                    }
+                ]
+            }, {
+                'name': '内网穿透',
+                'url': 'https://www.wezoz.com',
+                'icon': 'fab fa-github'
+            }]
+        }, {
+            'name': '动态菜单测试',
+            'icon': 'fa fa-desktop',
+            'models': [{
+                'name': time.time(),
+                'url': 'http://baidu.com',
+                'icon': 'far fa-surprise'
+            }]
+        }]
+}
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = False  # 是否使用TLS安全传输协议(用于在两个通信应用程序之间提供保密性和数据完整性。)
+EMAIL_USE_SSL = True  # 是否使用SSL加密，qq企业邮箱要求使用
+EMAIL_HOST = 'smtp.qq.com'  # 发送邮件的邮箱 的 SMTP服务器，这里用了163邮箱
+EMAIL_PORT = 465  # 发件箱的SMTP服务器端口
+EMAIL_HOST_USER = 'ybw.x@qq.com'  # 发送邮件的邮箱地址
+EMAIL_HOST_PASSWORD = 'ezlvoqgdesnobghg'  # 发送邮件的邮箱密码(这里使用的是授权码)

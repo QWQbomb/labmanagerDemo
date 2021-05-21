@@ -1,6 +1,9 @@
 from datetime import timezone
+
+from django.template.backends import django
 from django.utils import timezone
 from django.db import models
+from django.utils import datetime_safe
 
 
 # Create your models here.
@@ -24,7 +27,7 @@ class PerInfo(models.Model):
     perInfoId = models.AutoField('个人信息编号', primary_key=True)
     name = models.CharField('名字', max_length=20)
     address = models.CharField('地址', max_length=50, null=True, blank=True)  # null 默认值为 False， 所以仅在可为True 时写出
-    email = models.CharField('电邮', max_length=30, null=True, blank=True)
+    email = models.CharField('电子邮件', max_length=30, null=True, blank=True)
     telephone = models.CharField('手机号码', max_length=11)
 
     def __str__(self):
@@ -59,8 +62,10 @@ class Reservation(models.Model):
     # reNum = models.CharField(max_length=30)
     rePer = models.ForeignKey(to='PerInfo',
                               on_delete=models.CASCADE, verbose_name="预约人")
-    startTime = models.DateTimeField(verbose_name="开始时间", default=timezone.now())  # 待修改
-    endTime = models.DateTimeField(verbose_name="结束时间", default=timezone.now())  # 待修改
+    reEquip = models.ForeignKey(Equipment,to_field='eqName',
+                                on_delete=models.CASCADE, verbose_name="预约器材")
+    startTime = models.DateTimeField(verbose_name="开始时间", default=timezone.now)  # 待修改
+    endTime = models.DateTimeField(verbose_name="结束时间", default=timezone.now)  # 待修改
     approvalPer = models.ForeignKey(to='User',
                                     on_delete=models.CASCADE, verbose_name="批准人")
     reState = models.IntegerField('预约状态', choices=((0, '预约中'), (-1, '拒绝'), (1, '批准'), (2, '已结束')), default=0)
