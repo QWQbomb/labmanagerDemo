@@ -25,9 +25,10 @@ class User(models.Model):
 # 用户个人信息类
 class PerInfo(models.Model):
     perInfoId = models.AutoField('个人信息编号', primary_key=True)
+    perId = models.ForeignKey(to='auth.User', on_delete=models.CASCADE, verbose_name='用户账号')
     name = models.CharField('名字', max_length=20)
     address = models.CharField('地址', max_length=50, null=True, blank=True)  # null 默认值为 False， 所以仅在可为True 时写出
-    email = models.CharField('电子邮件', max_length=30, null=True, blank=True)
+    email = models.CharField('电子邮件', max_length=30)
     telephone = models.CharField('手机号码', max_length=11)
 
     def __str__(self):

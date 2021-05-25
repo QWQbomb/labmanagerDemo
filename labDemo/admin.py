@@ -1,3 +1,4 @@
+import notifications
 from django.contrib import admin
 
 # Register your models here.
@@ -10,22 +11,29 @@ admin.site.site_header = '实验室管理系统'
 
 @admin.register(PerInfo)
 class PerInfo(admin.ModelAdmin):
-    # 多用户隔离试行代码
-    # def get_queryset(self, request):
-    #     qs = super(PerInfo, self).get_queryset(request)
-    #     if request.user.is_superuser:
-    #         return qs
-    #     return qs.filter(user=request.user)
+    # 多用户隔离试行代码 每个用户只能看到自己的信息
+    def get_queryset(self, request):
+        qs = super(PerInfo, self).get_queryset(request)
+        if request.user.is_superuser:
+            # 如果是超级用户 则可以修改外键perId
+            PerInfo.readonly_fields = []
+            return qs
+        else:
+            # 如果是普通用户 将perId设为readonly以保证安全
+            PerInfo.readonly_fields = ['perId']
+            return qs.filter(perId=request.user)
+
     list_display = ('name', 'address', 'email', 'telephone')
     list_display_links = ('name',)
     list_per_page = 10
+
     # list_editable = ('address', 'email', 'telephone')
 
 
 @admin.register(Reservation)
 class Reservation(admin.ModelAdmin):
     list_display = ('reId', 'rePer', 'approvalPer', 'reState', 'startTime', 'endTime', 'reEquip')
-    list_display_links = ('reId', )
+    list_display_links = ('reId',)
     list_filter = ('reState',)
     list_per_page = 10
     list_editable = ('reState',)
@@ -56,6 +64,7 @@ class Equipment(admin.ModelAdmin):
             return False
 
         # 可在此处禁用删除按钮
+
     def has_delete_permission(self, request, obj=None):
         user_per_set = request.user.get_all_permissions()  # 获取当前用户权限
         # 待判断的权限范围
@@ -121,3 +130,4 @@ class Project(admin.ModelAdmin):
     #         #     return True
     #         # else:
     #         #     return False
+
